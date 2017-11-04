@@ -12,15 +12,23 @@
 
 typedef struct thread_pool {
 	int threadnum;
-	int workthreadnum;
-	pthread_t* taskque;
+	pthread_t* thread;
 	steque_t* taskque;
 	int tasknum;
 	pthread_mutex_t* lock;
 	pthread_cond_t* cond;
 } thread_pool;
 
-typedef struct request_context {
-	gfcontext_t* ctx;
-	char* path;
-} request_context;
+typedef enum cache_status {
+	FILE_REQUESTING,
+	FILE_NOT_FOUND,
+	FILE_IN_CACHE
+} cache_status;
+
+typedef struct cache_request {
+	long mtype;
+	char* path[512];
+	ssize_t filesize;
+	cache_status status;
+	int shmid;
+} cache_request;
